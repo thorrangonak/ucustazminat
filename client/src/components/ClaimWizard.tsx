@@ -6,7 +6,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { 
   Plane, MapPin, Users, ArrowRight, ArrowLeft, Check, 
-  Calendar, AlertCircle, AlertTriangle, XCircle, Info
+  Calendar, AlertCircle, AlertTriangle, XCircle, Info, Camera
 } from "lucide-react";
 import { 
   airports, 
@@ -15,6 +15,7 @@ import {
   getCompensationByDistance,
   type Airport 
 } from "@shared/airports";
+import BoardingPassScanner, { type BoardingPassData } from "@/components/BoardingPassScanner";
 
 interface PassengerInfo {
   firstName: string;
@@ -531,6 +532,7 @@ export default function ClaimWizard({ onComplete }: ClaimWizardProps) {
   const [step, setStep] = useState(1);
   const [data, setData] = useState<WizardData>(initialData);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showBoardingPassScanner, setShowBoardingPassScanner] = useState(false);
 
   // Dinamik adım sayısı hesaplama
   const totalSteps = 7;
@@ -649,6 +651,49 @@ export default function ClaimWizard({ onComplete }: ClaimWizardProps) {
     updateData({ passengers: newPassengers });
   };
 
+  const handleBoardingPassScan = (scannedData: BoardingPassData) => {
+    setShowBoardingPassScanner(false);
+
+    // Havalimanları güncelle
+    if (scannedData.departureAirport) {
+      const depAirport = airports.find(a => a.code === scannedData.departureAirport);
+      if (depAirport) {
+        updateData({ departureAirport: depAirport });
+      }
+    }
+
+    if (scannedData.arrivalAirport) {
+      const arrAirport = airports.find(a => a.code === scannedData.arrivalAirport);
+      if (arrAirport) {
+        updateData({ arrivalAirport: arrAirport });
+      }
+    }
+
+    // Uçuş bilgilerini güncelle
+    if (scannedData.flightNumber && scannedData.flightDate) {
+      updateData({
+        flight1: {
+          flightNumber: scannedData.flightNumber,
+          flightDate: scannedData.flightDate
+        }
+      });
+    }
+
+    // Yolcu adını güncelle
+    if (scannedData.passengerName && scannedData.passengerName.includes(' ')) {
+      const [firstName, ...lastNameParts] = scannedData.passengerName.split(' ');
+      const lastName = lastNameParts.join(' ');
+      
+      const newPassengers = [...data.passengers];
+      newPassengers[0] = {
+        ...newPassengers[0],
+        firstName: firstName || '',
+        lastName: lastName || ''
+      };
+      updateData({ passengers: newPassengers });
+    }
+  };
+
   const renderStepContent = () => {
     // Adım 1: Havalimanları
     if (step === 1) {
@@ -657,8 +702,27 @@ export default function ClaimWizard({ onComplete }: ClaimWizardProps) {
           <div>
             <h3 className="text-lg sm:text-xl font-bold mb-1 sm:mb-2">Uçuş Güzergahı</h3>
             <p className="text-sm sm:text-base text-muted-foreground">
-              Kalkış ve varış havalimanlarını seçin.
+              Kalkış ve varış havalimanlarını seçin veya biniş kartınızı taratın.
             </p>
+          </div>
+
+          <Button
+            type="button"
+            onClick={() => setShowBoardingPassScanner(true)}
+            variant="outline"
+            className="w-full border-dashed border-2 py-6"
+          >
+            <Camera className="w-5 h-5 mr-2" />
+            <span>Biniş Kartı Tara</span>
+          </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-foreground/20" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">veya manuel girin</span>
+            </div>
           </div>
 
           <AirportSearch
@@ -1144,6 +1208,16 @@ export default function ClaimWizard({ onComplete }: ClaimWizardProps) {
 
   return (
     <div className="flex flex-col lg:grid lg:grid-cols-3 gap-6 lg:gap-8">
+      {showBoardingPassScanner && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-background rounded-lg max-w-md w-full shadow-xl">
+            <BoardingPassScanner
+              onScanSuccess={handleBoardingPassScan}
+              onCancel={() => setShowBoardingPassScanner(false)}
+            />
+          </div>
+        </div>
+      )}
       {/* Mobilde Tazminat Özeti Üstte */}
       <div className="lg:hidden order-first">
         <CompensationSummary
