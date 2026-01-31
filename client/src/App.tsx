@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import { lazy, Suspense } from "react";
 import LiveChatWidget from "./components/LiveChatWidget";
+import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 // Lazy load dashboard pages
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -105,6 +106,7 @@ function App() {
           <Router />
           <CookieBanner />
           <LiveChatWidget />
+          <PWAInstallPrompt />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

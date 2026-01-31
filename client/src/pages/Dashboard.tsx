@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { NewsletterSection, ReferAFriendSection, AffiliateProgramSection } from "@/components/MarketingComponents";
+import AdditionalServices from "@/components/AdditionalServices";
 
 const statusLabels: Record<string, string> = {
   draft: "Taslak",
@@ -337,17 +338,23 @@ export default function Dashboard() {
            )}
          </div>
 
-         {/* Marketing Section - Newsletter & Referral */}
-         <div className="grid md:grid-cols-2 gap-6 mt-8 pt-8 border-t border-foreground/10">
-           <NewsletterSection />
-           <ReferAFriendSection />
-         </div>
+        {/* Marketing Section - Newsletter & Referral */}
+        <div className="grid md:grid-cols-2 gap-6 mt-8 pt-8 border-t border-foreground/10">
+          <NewsletterSection />
+          <ReferAFriendSection />
+        </div>
 
-         {/* Affiliate Program */}
-         <div className="mt-6">
-           <AffiliateProgramSection />
-         </div>
-       </main>
-     </div>
-   );
- }
+        {/* Affiliate Program */}
+        <div className="mt-6">
+          <AffiliateProgramSection />
+        </div>
+
+        {/* Additional Services */}
+        <div className="mt-8 pt-8 border-t border-foreground/10">
+          <h2 className="text-xl font-bold mb-4">Ek Hizmetler</h2>
+          <AdditionalServices />
+        </div>
+      </main>
+    </div>
+  );
+}

@@ -34,11 +34,29 @@
     <meta property="twitter:description" content="Geciken, iptal edilen veya fazla rezervasyon yapılan uçuşlarınız için 600 Euro'ya kadar tazminat alın. Başarı garantisi - kazanamazsak ücret yok." />
     <meta property="twitter:image" content="https://www.ucustazminat.com/og-image.png" />
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    
-    <!-- Theme Color -->
+     <!-- Favicon -->
+     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+     
+     <!-- PWA Manifest -->
+     <link rel="manifest" href="/manifest.json" />
+     
+     <!-- Service Worker -->
+     <script>
+       if ('serviceWorker' in navigator) {
+         window.addEventListener('load', () => {
+           navigator.serviceWorker.register('/sw.js')
+             .then((registration) => {
+               console.log('Service Worker registered:', registration);
+             })
+             .catch((error) => {
+               console.log('Service Worker registration failed:', error);
+             });
+         });
+       }
+     </script>
+     
+     <!-- Theme Color -->
     <meta name="theme-color" content="#dc2626" />
     <meta name="msapplication-TileColor" content="#dc2626" />
     
