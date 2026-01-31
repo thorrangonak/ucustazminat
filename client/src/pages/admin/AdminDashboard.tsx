@@ -59,6 +59,7 @@ export default function AdminDashboard() {
     { href: "/admin/users", icon: Users, label: "Kullanıcılar", active: false },
     { href: "/admin/airlines", icon: PlaneIcon, label: "Havayolları", active: false },
     { href: "/admin/stats", icon: BarChart3, label: "İstatistikler", active: false },
+    { href: "/admin/analytics", icon: TrendingUp, label: "Analytics", active: false },
     { href: "/admin/blog", icon: BookOpen, label: "Blog", active: false },
     { href: "/admin/support", icon: HeadphonesIcon, label: "Destek", active: false },
   ];

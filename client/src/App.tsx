@@ -17,6 +17,7 @@ const AdminClaims = lazy(() => import("./pages/admin/AdminClaims"));
 const AdminClaimDetail = lazy(() => import("./pages/admin/AdminClaimDetail"));
 const AdminAirlines = lazy(() => import("./pages/admin/AdminAirlines"));
 const AdminStats = lazy(() => import("./pages/admin/AdminStats"));
+const AdminAnalytics = lazy(() => import("./pages/admin/AdminAnalytics"));
 const AdminBlog = lazy(() => import("./pages/admin/AdminBlog"));
 const AdminSupport = lazy(() => import("./pages/admin/AdminSupport"));
 const AdminUsers = lazy(() => import("./pages/admin/AdminUsers"));
@@ -71,6 +72,7 @@ function Router() {
         <Route path="/admin/claims/:id" component={AdminClaimDetail} />
         <Route path="/admin/airlines" component={AdminAirlines} />
         <Route path="/admin/stats" component={AdminStats} />
+        <Route path="/admin/analytics" component={AdminAnalytics} />
         <Route path="/admin/blog" component={AdminBlog} />
         <Route path="/admin/support" component={AdminSupport} />
         <Route path="/admin/users" component={AdminUsers} />
