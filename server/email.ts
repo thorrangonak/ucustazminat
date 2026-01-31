@@ -1,7 +1,14 @@
 import { Resend } from 'resend';
 
 // Resend client - API key env'den alınacak
-const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = process.env.RESEND_API_KEY 
+  ? new Resend(process.env.RESEND_API_KEY)
+  : null;
+
+// Resend kullanılabilir mi kontrol et
+export const isEmailEnabled = (): boolean => {
+  return !!resend && process.env.RESEND_API_KEY !== undefined && process.env.RESEND_API_KEY !== '';
+};
 
 // E-posta gönderici adresi
 const FROM_EMAIL = 'UçuşTazminat <bildirim@mail.ucustazminat.com>';
@@ -217,7 +224,8 @@ export async function sendClaimCreatedEmail(params: {
   `;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = if (!resend) { console.log("[Email] Resend not configured, skipping email"); return false; }
+await resend.emails.send{
       from: FROM_EMAIL,
       to: params.to,
       subject: `Talebiniz Oluşturuldu - ${params.claimNumber}`,
@@ -298,7 +306,8 @@ export async function sendStatusUpdateEmail(params: {
   `;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = if (!resend) { console.log("[Email] Resend not configured, skipping email"); return false; }
+await resend.emails.send{
       from: FROM_EMAIL,
       to: params.to,
       subject: `Talep Durumu: ${statusLabel} - ${params.claimNumber}`,
@@ -349,7 +358,8 @@ export async function sendDocumentReminderEmail(params: {
   `;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = if (!resend) { console.log("[Email] Resend not configured, skipping email"); return false; }
+await resend.emails.send{
       from: FROM_EMAIL,
       to: params.to,
       subject: `Belge Hatırlatması - ${params.claimNumber}`,
@@ -395,7 +405,8 @@ export async function sendWelcomeEmail(params: {
   `;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = if (!resend) { console.log("[Email] Resend not configured, skipping email"); return false; }
+await resend.emails.send{
       from: FROM_EMAIL,
       to: params.to,
       subject: 'UçuşTazminat\'a Hoş Geldiniz!',
@@ -421,7 +432,8 @@ export async function sendEmail(params: {
   html: string;
 }): Promise<boolean> {
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = if (!resend) { console.log("[Email] Resend not configured, skipping email"); return false; }
+await resend.emails.send{
       from: FROM_EMAIL,
       to: params.to,
       subject: params.subject,
@@ -472,7 +484,8 @@ export async function sendPasswordResetEmail(
   `;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = if (!resend) { console.log("[Email] Resend not configured, skipping email"); return false; }
+await resend.emails.send{
       from: FROM_EMAIL_NOREPLY,
       to: to,
       subject: 'Şifre Sıfırlama Talebi - UçuşTazminat',
@@ -532,7 +545,8 @@ export async function sendEmailVerificationEmail(
   `;
 
   try {
-    const { error } = await resend.emails.send({
+    const { error } = if (!resend) { console.log("[Email] Resend not configured, skipping email"); return false; }
+await resend.emails.send{
       from: FROM_EMAIL_NOREPLY,
       to: to,
       subject: 'E-posta Adresinizi Doğrulayın - UçuşTazminat',
