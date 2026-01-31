@@ -85,6 +85,9 @@ function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
           <Link href="/blog" className="text-sm font-medium hover:text-primary transition-colors">
             Blog
           </Link>
+          <Link href="/premium" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
+            Premium
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-4">

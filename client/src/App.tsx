@@ -29,6 +29,7 @@ const BlogPost = lazy(() => import("./pages/BlogPost"));
 const Support = lazy(() => import("./pages/Support"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const Premium = lazy(() => import("./pages/Premium"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
@@ -63,6 +64,7 @@ function Router() {
         <Route path="/dashboard/new-claim" component={NewClaim} />
         <Route path="/dashboard/claims/:id" component={ClaimDetail} />
         <Route path="/dashboard/support" component={Support} />
+        <Route path="/premium" component={Premium} />
         <Route path="/yardim" component={HelpCenter} />
         <Route path="/yardim/:id" component={HelpCenter} />
         

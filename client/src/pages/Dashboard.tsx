@@ -113,16 +113,22 @@ export default function Dashboard() {
             <span className="font-bold text-lg sm:text-xl tracking-tight">UçuşTazminat</span>
           </Link>
           
-          {/* Desktop Actions */}
-          <div className="hidden sm:flex items-center gap-2 sm:gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="sm">
-                <Home className="w-4 h-4 mr-2" />
-                Ana Sayfa
-              </Button>
-            </Link>
-            
-            <Button variant="ghost" size="icon" className="relative">
+           {/* Desktop Actions */}
+           <div className="hidden sm:flex items-center gap-2 sm:gap-4">
+             <Link href="/">
+               <Button variant="ghost" size="sm">
+                 <Home className="w-4 h-4 mr-2" />
+                 Ana Sayfa
+               </Button>
+             </Link>
+             <Link href="/premium">
+               <Button variant="ghost" size="sm" className="text-primary">
+                 <Plus className="w-4 h-4 mr-2" />
+                 Premium
+               </Button>
+             </Link>
+             
+             <Button variant="ghost" size="icon" className="relative">
               <Bell className="w-5 h-5" />
               {unreadCount && unreadCount.count > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-primary text-primary-foreground text-xs flex items-center justify-center">
