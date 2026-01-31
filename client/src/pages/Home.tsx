@@ -6,6 +6,7 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import { LanguageSwitcher, CurrencySwitcher } from "@/components/LanguageCurrencySwitcher";
 import { 
   Plane, 
   Clock, 
@@ -68,7 +69,134 @@ function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-6 lg:gap-8">
+        <nav className="hidden md:flex items-center gap-4 lg:gap-6">
+          <a href="#hesapla" className="text-sm font-medium hover:text-primary transition-colors">
+            Tazminat Hesapla
+          </a>
+          <a href="#nasil-calisir" className="text-sm font-medium hover:text-primary transition-colors">
+            Nasıl Çalışır
+          </a>
+          <a href="#tazminat" className="text-sm font-medium hover:text-primary transition-colors">
+            Tazminat Miktarları
+          </a>
+          <a href="#sss" className="text-sm font-medium hover:text-primary transition-colors">
+            SSS
+          </a>
+          <Link href="/blog" className="text-sm font-medium hover:text-primary transition-colors">
+            Blog
+          </Link>
+        </nav>
+
+        <div className="flex items-center gap-2 sm:gap-4">
+          {/* Language and Currency Switchers */}
+          <div className="hidden sm:flex items-center gap-2">
+            <LanguageSwitcher />
+          </div>
+          
+          {/* WhatsApp Button - Desktop */}
+          <a 
+            href="https://wa.me/905321234567" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hidden lg:flex items-center gap-2 text-sm font-medium text-green-600 hover:text-green-700 transition-colors"
+          >
+            <MessageCircle className="w-4 h-4" />
+            <span>WhatsApp</span>
+          </a>
+          
+          {isAuthenticated ? (
+            <Link href="/dashboard">
+              <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-xs sm:text-sm">
+                Panelim
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/giris">
+              <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-xs sm:text-sm">
+                Giriş Yap
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
+              </Button>
+            </Link>
+          )}
+          
+          {/* Mobile Menu Button */}
+          <button 
+            className="md:hidden p-2 hover:bg-secondary rounded-lg transition-colors"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Menü"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+      
+      {/* Mobile Navigation */}
+      {mobileMenuOpen && (
+        <nav className="md:hidden border-t border-foreground/10 bg-background">
+          <div className="container py-4 space-y-3">
+            <a 
+              href="#hesapla" 
+              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tazminat Hesapla
+            </a>
+            <a 
+              href="#nasil-calisir" 
+              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Nasıl Çalışır
+            </a>
+            <a 
+              href="#tazminat" 
+              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Tazminat Miktarları
+            </a>
+            <a 
+              href="#sss" 
+              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              SSS
+            </a>
+            <Link 
+              href="/blog" 
+              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Blog
+            </Link>
+            <div className="pt-3 border-t border-foreground/10">
+              <div className="flex items-center gap-2 mb-3">
+                <LanguageSwitcher />
+              </div>
+              <a 
+                href="https://wa.me/905321234567" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 py-2 text-sm font-medium text-green-600"
+              >
+                <MessageCircle className="w-4 h-4" />
+                WhatsApp ile İletişim
+              </a>
+              <a 
+                href="tel:+905321234567" 
+                className="flex items-center gap-2 py-2 text-sm font-medium text-primary"
+              >
+                <Phone className="w-4 h-4" />
+                +90 532 123 45 67
+              </a>
+            </div>
+          </div>
+        </nav>
+      )}
+    </header>
+  );
+}
           <a href="#hesapla" className="text-sm font-medium hover:text-primary transition-colors">
             Tazminat Hesapla
           </a>

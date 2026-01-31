@@ -16,6 +16,7 @@ import {
   type Airport 
 } from "@shared/airports";
 import BoardingPassScanner, { type BoardingPassData } from "@/components/BoardingPassScanner";
+import { CurrencyDisplay, CurrencySwitcher } from "@/components/LanguageCurrencySwitcher";
 
 interface PassengerInfo {
   firstName: string;
@@ -488,36 +489,38 @@ function CompensationSummary({
         </div>
       ) : (
         <>
-          <div className="space-y-2 sm:space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Mesafe</span>
-              <span className="font-medium">{calculation.distance.toLocaleString()} km</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Kişi başı tazminat</span>
-              <span className="font-medium">{calculation.amount}€</span>
-            </div>
-            {calculation.passengerCount > 1 && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Yolcu sayısı</span>
-                <span className="font-medium">{calculation.passengerCount} kişi</span>
+              <div className="space-y-2 sm:space-y-3 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Mesafe</span>
+                  <span className="font-medium">{calculation.distance.toLocaleString()} km</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Kişi başı tazminat</span>
+                  <span className="font-medium">{calculation.amount}€</span>
+                </div>
+                {calculation.passengerCount > 1 && (
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Yolcu sayısı</span>
+                    <span className="font-medium">{calculation.passengerCount} kişi</span>
+                  </div>
+                )}
+                <div className="border-t border-foreground/10 pt-2 sm:pt-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-muted-foreground">Toplam tazminat</span>
+                    <CurrencyDisplay amountEUR={calculation.totalAmount} />
+                  </div>
+                </div>
+                <div className="flex justify-between text-xs">
+                  <span className="text-muted-foreground">Komisyon (%25)</span>
+                  <span>-{calculation.commission}€</span>
+                </div>
+                <div className="flex justify-between font-bold text-base sm:text-lg border-t border-foreground/10 pt-2 items-center">
+                  <span>Size ödenecek</span>
+                  <span className="text-green-600">
+                    <CurrencyDisplay amountEUR={calculation.netAmount} />
+                  </span>
+                </div>
               </div>
-            )}
-            <div className="border-t border-foreground/10 pt-2 sm:pt-3">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Toplam tazminat</span>
-                <span className="font-bold text-primary">{calculation.totalAmount}€</span>
-              </div>
-            </div>
-            <div className="flex justify-between text-xs">
-              <span className="text-muted-foreground">Komisyon (%25)</span>
-              <span>-{calculation.commission}€</span>
-            </div>
-            <div className="flex justify-between font-bold text-base sm:text-lg border-t border-foreground/10 pt-2">
-              <span>Size ödenecek</span>
-              <span className="text-green-600">{calculation.netAmount}€</span>
-            </div>
-          </div>
         </>
       )}
     </div>
