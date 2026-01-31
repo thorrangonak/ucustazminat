@@ -6,7 +6,6 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import { LanguageSwitcher, CurrencySwitcher } from "@/components/LanguageCurrencySwitcher";
 import { 
   Plane, 
   Clock, 
@@ -26,9 +25,7 @@ import {
   Award,
   Zap,
   ShieldCheck,
-  Star,
-  Trophy,
-  Medal
+  Star
 } from "lucide-react";
 import ClaimWizard from "@/components/ClaimWizard";
 
@@ -38,26 +35,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead {...SEO_CONFIG.home} />
-      <StructuredData type="all" data={{
-        faqs: [
-          { question: "Hangi durumlarda tazminat talep edebilirim?", answer: "3 saatten fazla gecikme, uçuş iptali, boarding reddi (overbooking) veya kaçırılan bağlantılı uçuş durumlarında tazminat talep edebilirsiniz. AB 261/2004 yönetmeliği kapsamında, AB'den kalkan veya AB havayolu ile AB'ye inen uçuşlar için geçerlidir." },
-          { question: "Ne kadar tazminat alabilirim?", answer: "Tazminat miktarı uçuş mesafesine göre belirlenir: 1500 km'ye kadar 250€, 1500-3500 km arası 400€, 3500 km üzeri 600€. Birden fazla yolcu için her yolcu ayrı tazminat alır." },
-          { question: "Süreç ne kadar sürer?", answer: "Talep süreci genellikle 2-6 ay arasında tamamlanır. Havayolunun yanıt süresine ve talebin karmaşıklığına bağlı olarak değişebilir. Hukuki süreç gerekirse daha uzun sürebilir." },
-          { question: "Komisyon oranınız nedir?", answer: "Sadece başarılı talepler için %25 komisyon alıyoruz. Tazminat alamazsanız, hiçbir ücret ödemezsiniz. Başarı garantisi ile çalışıyoruz." },
-          { question: "Hangi belgeler gerekli?", answer: "Uçuş bileti veya rezervasyon onayı, kimlik belgesi (TC Kimlik veya Pasaport) ve varsa gecikme/iptal bildirimi gereklidir. Tüm yolcular için ayrı belgeler yüklenmelidir." },
-          { question: "Eski uçuşlar için başvuru yapabilir miyim?", answer: "Evet, son 3 yıl içindeki uçuşlar için tazminat talep edebilirsiniz. Daha eski uçuşlar için zaman aşımı nedeniyle talep hakkınız düşmüş olabilir." }
-        ]
-      }} />
+      <StructuredData type="all" />
       <Header isAuthenticated={isAuthenticated} />
       <HeroSection />
       <TrustBadgesSection />
       <StatsSection />
-      <AwardsAndPressSection />
       <QuickCalculatorSection />
       <ClaimWizardSection isAuthenticated={isAuthenticated} />
       <HowItWorksSection />
       <CompensationTiersSection />
-      <TrustpilotWidget />
       <TestimonialsSection />
       <FAQSection />
       <CTASection isAuthenticated={isAuthenticated} />
@@ -78,137 +64,7 @@ function Header({ isAuthenticated }: { isAuthenticated: boolean }) {
         </Link>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-4 lg:gap-6">
-          <a href="#hesapla" className="text-sm font-medium hover:text-primary transition-colors">
-            Tazminat Hesapla
-          </a>
-          <a href="#nasil-calisir" className="text-sm font-medium hover:text-primary transition-colors">
-            Nasıl Çalışır
-          </a>
-          <a href="#tazminat" className="text-sm font-medium hover:text-primary transition-colors">
-            Tazminat Miktarları
-          </a>
-          <a href="#sss" className="text-sm font-medium hover:text-primary transition-colors">
-            SSS
-          </a>
-          <Link href="/blog" className="text-sm font-medium hover:text-primary transition-colors">
-            Blog
-          </Link>
-          <Link href="/premium" className="text-sm font-medium text-primary hover:text-primary/80 transition-colors">
-            Premium
-          </Link>
-        </nav>
-
-        <div className="flex items-center gap-2 sm:gap-4">
-          {/* Language and Currency Switchers */}
-          <div className="hidden sm:flex items-center gap-2">
-            <LanguageSwitcher />
-          </div>
-          
-          {/* WhatsApp Button - Desktop */}
-          <a 
-            href="https://wa.me/905321234567" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="hidden lg:flex items-center gap-2 text-sm font-medium text-green-600 hover:text-green-700 transition-colors"
-          >
-            <MessageCircle className="w-4 h-4" />
-            <span>WhatsApp</span>
-          </a>
-          
-          {isAuthenticated ? (
-            <Link href="/dashboard">
-              <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-xs sm:text-sm">
-                Panelim
-                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
-              </Button>
-            </Link>
-          ) : (
-            <Link href="/giris">
-              <Button variant="default" size="sm" className="bg-primary hover:bg-primary/90 text-xs sm:text-sm">
-                Giriş Yap
-                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 ml-1" />
-              </Button>
-            </Link>
-          )}
-          
-          {/* Mobile Menu Button */}
-          <button 
-            className="md:hidden p-2 hover:bg-secondary rounded-lg transition-colors"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Menü"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </div>
-      
-      {/* Mobile Navigation */}
-      {mobileMenuOpen && (
-        <nav className="md:hidden border-t border-foreground/10 bg-background">
-          <div className="container py-4 space-y-3">
-            <a 
-              href="#hesapla" 
-              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Tazminat Hesapla
-            </a>
-            <a 
-              href="#nasil-calisir" 
-              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Nasıl Çalışır
-            </a>
-            <a 
-              href="#tazminat" 
-              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Tazminat Miktarları
-            </a>
-            <a 
-              href="#sss" 
-              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              SSS
-            </a>
-            <Link 
-              href="/blog" 
-              className="block py-2 text-sm font-medium hover:text-primary transition-colors"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Blog
-            </Link>
-            <div className="pt-3 border-t border-foreground/10">
-              <div className="flex items-center gap-2 mb-3">
-                <LanguageSwitcher />
-              </div>
-              <a 
-                href="https://wa.me/905321234567" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 py-2 text-sm font-medium text-green-600"
-              >
-                <MessageCircle className="w-4 h-4" />
-                WhatsApp ile İletişim
-              </a>
-              <a 
-                href="tel:+905321234567" 
-                className="flex items-center gap-2 py-2 text-sm font-medium text-primary"
-              >
-                <Phone className="w-4 h-4" />
-                +90 532 123 45 67
-              </a>
-            </div>
-          </div>
-        </nav>
-      )}
-    </header>
-  );
-}
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8">
           <a href="#hesapla" className="text-sm font-medium hover:text-primary transition-colors">
             Tazminat Hesapla
           </a>
@@ -428,14 +284,12 @@ function TrustBadgesSection() {
     {
       icon: Award,
       title: "No Win No Fee",
-      description: "Kazanmazsak ücret yok"
+      description: "Kazanamazsak ücret yok"
     },
     {
       icon: Star,
-      title: "4.9/5 Trustpilot",
-      description: "500+ müşteri yorumu",
-      isLink: true,
-      href: "https://www.trustpilot.com/review/ucustazminat.com"
+      title: "4.9/5 Puan",
+      description: "Müşteri memnuniyeti"
     },
     {
       icon: Zap,
@@ -449,33 +303,15 @@ function TrustBadgesSection() {
       <div className="container">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
           {badges.map((badge) => (
-            badge.isLink && badge.href ? (
-              <a
-                key={badge.title}
-                href={badge.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-              >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <badge.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-                </div>
-                <div>
-                  <div className="font-semibold text-sm sm:text-base">{badge.title}</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">{badge.description}</div>
-                </div>
-              </a>
-            ) : (
-              <div key={badge.title} className="flex items-center gap-3">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                  <badge.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
-                </div>
-                <div>
-                  <div className="font-semibold text-sm sm:text-base">{badge.title}</div>
-                  <div className="text-xs sm:text-sm text-muted-foreground">{badge.description}</div>
-                </div>
+            <div key={badge.title} className="flex items-center gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <badge.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary" />
               </div>
-            )
+              <div>
+                <div className="font-semibold text-sm sm:text-base">{badge.title}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">{badge.description}</div>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -485,10 +321,10 @@ function TrustBadgesSection() {
 
 function StatsSection() {
   const stats = [
-    { value: "2,847+", label: "Başarılı Talep", description: "müşteri tazminatı aldı" },
-    { value: "€847K+", label: "Toplam Tazminat", description: "müşterilerimize ödendi" },
-    { value: "%94", label: "Başarı Oranı", description: "uygun taleplerde" },
-    { value: "12K+", label: "Mutlu Müşteri", description: "5 yıldız puan verdi" }
+    { value: "500+", label: "Başarılı Talep", description: "ve artıyor" },
+    { value: "€150K+", label: "Toplam Tazminat", description: "müşterilerimize ödendi" },
+    { value: "%95", label: "Başarı Oranı", description: "uygun taleplerde" },
+    { value: "4-8", label: "Hafta", description: "ortalama işlem süresi" }
   ];
 
   return (
@@ -751,115 +587,6 @@ function ClaimWizardSection({ isAuthenticated }: { isAuthenticated: boolean }) {
   );
 }
 
-function AwardsAndPressSection() {
-  const awards = [
-    {
-      title: "Best Flight Compensation Service 2025",
-      organization: "Travel Tech Awards",
-      year: "2025",
-      icon: Trophy
-    },
-    {
-      title: "Customer Excellence Award",
-      organization: "Travel Service Awards",
-      year: "2024",
-      icon: Medal
-    },
-    {
-      title: "Innovation in Travel Tech",
-      organization: "Travel Innovation Awards",
-      year: "2024",
-      icon: Award
-    }
-  ];
-
-  const press = [
-    {
-      name: "Sabah Gazetesi",
-      title: "Uçak yolcularının hakkı var",
-      url: "#",
-      logo: "📰"
-    },
-    {
-      name: "Hürriyet",
-      title: "Geciken uçuşlar için tazminat nasıl alınır?",
-      url: "#",
-      logo: "📰"
-    },
-    {
-      name: "Milliyet",
-      title: "Tazminat hakkınızı kullanın",
-      url: "#",
-      logo: "📰"
-    },
-    {
-      name: "Bloomberg",
-      title: "Flight compensation services in Turkey",
-      url: "#",
-      logo: "📰"
-    },
-    {
-      name: "Forbes",
-      title: "How to claim flight delay compensation",
-      url: "#",
-      logo: "📰"
-    }
-  ];
-
-  return (
-    <section className="py-12 sm:py-16 md:py-20 bg-secondary border-b border-foreground/10">
-      <div className="container">
-        <div className="text-center mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3">Ödüller ve Medya</h2>
-          <p className="text-muted-foreground text-sm sm:text-base">
-            Sektör lideri olarak tanınan hizmetimiz hakkında medyada çıkan haberler
-          </p>
-        </div>
-
-        {/* Awards */}
-        <div className="mb-12 sm:mb-16">
-          <h3 className="text-lg font-bold mb-6 text-center">Kazandığımız Ödüller</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            {awards.map((award, index) => (
-              <div 
-                key={index} 
-                className="bg-background p-6 rounded-lg border border-border text-center hover:shadow-lg transition-shadow"
-              >
-                <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <award.icon className="w-8 h-8 text-primary" />
-                </div>
-                <h4 className="font-bold text-base sm:text-lg mb-2">{award.title}</h4>
-                <p className="text-muted-foreground text-sm">{award.organization}</p>
-                <p className="text-xs text-muted-foreground mt-1">{award.year}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Press Mentions */}
-        <div>
-          <h3 className="text-lg font-bold mb-6 text-center">Medyada Biz</h3>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {press.map((item, index) => (
-              <a
-                key={index}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-background p-4 rounded-lg border border-border text-center hover:border-primary/50 transition-colors"
-              >
-                <div className="text-3xl mb-2">{item.logo}</div>
-                <h4 className="font-semibold text-sm mb-1">{item.name}</h4>
-                <p className="text-xs text-muted-foreground">{item.title}</p>
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function HowItWorksSection() {
   const steps = [
     {
@@ -1073,53 +800,6 @@ function CompensationTiersSection() {
               Bazı uçuşlar hem SHY-YOLCU hem de EC-261 kapsamında olabilir. 
               Bu durumda sizin için en avantajlı olanı uygulanır.
             </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function TrustpilotWidget() {
-  return (
-    <section className="py-8 sm:py-10 bg-secondary/30 border-b border-foreground/10">
-      <div className="container">
-        <div className="bg-background rounded-lg p-6 sm:p-8 border border-border max-w-4xl mx-auto">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-4 sm:gap-6">
-              <div className="text-4xl sm:text-5xl">⭐</div>
-              <div>
-                <div className="text-2xl sm:text-3xl font-bold mb-1">4.9 out of 5</div>
-                <div className="flex items-center gap-2 mb-1">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-4 h-4 text-green-500 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
-                    </svg>
-                  ))}
-                  <span className="text-sm text-muted-foreground">Excellent</span>
-                </div>
-                <a 
-                  href="https://www.trustpilot.com/review/ucustazminat.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Trustpilot'da 500+ yorum
-                </a>
-              </div>
-            </div>
-            <a 
-              href="https://www.trustpilot.com/review/ucustazminat.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="shrink-0"
-            >
-              <img
-                src="https://images.trustpilot.com/brand-assets/4.1/Logo/light-background.svg"
-                alt="Trustpilot"
-                className="h-8 sm:h-10"
-              />
-            </a>
           </div>
         </div>
       </div>
