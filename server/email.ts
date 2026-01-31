@@ -2,7 +2,7 @@ import { Resend } from 'resend';
 
 // Resend client - API key env'den alınacak
 const resend = process.env.RESEND_API_KEY 
-  ? new Resend(process.env.RESEND_API_KEY)
+  ? new Resend(process.env.RESEND_API_KEY) 
   : null;
 
 // Resend kullanılabilir mi kontrol et
