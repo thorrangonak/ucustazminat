@@ -279,9 +279,19 @@ export async function invokeLLM(params: InvokeParams): Promise<InvokeResult> {
     response_format,
   } = params;
 
+  // Filter out image and file content for gemini-2.5-flash (text-only model)
+  const textOnlyMessages = messages.map(msg => ({
+    ...msg,
+    content: Array.isArray(msg.content)
+      ? msg.content.filter(part => typeof part === "string" || part.type === "text")
+      : typeof msg.content === "string"
+      ? { type: "text", text: msg.content }
+      : msg.content,
+  }));
+
   const payload: Record<string, unknown> = {
     model: "gemini-2.5-flash",
-    messages: messages.map(normalizeMessage),
+    messages: textOnlyMessages.map(normalizeMessage),
   };
 
   if (tools && tools.length > 0) {
