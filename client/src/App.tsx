@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import { lazy, Suspense } from "react";
+import LiveChatWidget from "./components/LiveChatWidget";
 
 // Lazy load dashboard pages
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -30,6 +31,7 @@ const Register = lazy(() => import("./pages/Register"));
 const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const VerifyEmail = lazy(() => import("./pages/VerifyEmail"));
+const HelpCenter = lazy(() => import("./pages/HelpCenter"));
 import CookieBanner from "./components/CookieBanner";
 
 function LoadingFallback() {
@@ -60,6 +62,8 @@ function Router() {
         <Route path="/dashboard/new-claim" component={NewClaim} />
         <Route path="/dashboard/claims/:id" component={ClaimDetail} />
         <Route path="/dashboard/support" component={Support} />
+        <Route path="/yardim" component={HelpCenter} />
+        <Route path="/yardim/:id" component={HelpCenter} />
         
         {/* Admin routes */}
         <Route path="/admin" component={AdminDashboard} />
@@ -96,6 +100,7 @@ function App() {
           <Toaster />
           <Router />
           <CookieBanner />
+          <LiveChatWidget />
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>
