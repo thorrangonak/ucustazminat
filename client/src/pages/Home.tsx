@@ -38,7 +38,16 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead {...SEO_CONFIG.home} />
-      <StructuredData type="all" />
+      <StructuredData type="all" data={{
+        faqs: [
+          { question: "Hangi durumlarda tazminat talep edebilirim?", answer: "3 saatten fazla gecikme, uçuş iptali, boarding reddi (overbooking) veya kaçırılan bağlantılı uçuş durumlarında tazminat talep edebilirsiniz. AB 261/2004 yönetmeliği kapsamında, AB'den kalkan veya AB havayolu ile AB'ye inen uçuşlar için geçerlidir." },
+          { question: "Ne kadar tazminat alabilirim?", answer: "Tazminat miktarı uçuş mesafesine göre belirlenir: 1500 km'ye kadar 250€, 1500-3500 km arası 400€, 3500 km üzeri 600€. Birden fazla yolcu için her yolcu ayrı tazminat alır." },
+          { question: "Süreç ne kadar sürer?", answer: "Talep süreci genellikle 2-6 ay arasında tamamlanır. Havayolunun yanıt süresine ve talebin karmaşıklığına bağlı olarak değişebilir. Hukuki süreç gerekirse daha uzun sürebilir." },
+          { question: "Komisyon oranınız nedir?", answer: "Sadece başarılı talepler için %25 komisyon alıyoruz. Tazminat alamazsanız, hiçbir ücret ödemezsiniz. Başarı garantisi ile çalışıyoruz." },
+          { question: "Hangi belgeler gerekli?", answer: "Uçuş bileti veya rezervasyon onayı, kimlik belgesi (TC Kimlik veya Pasaport) ve varsa gecikme/iptal bildirimi gereklidir. Tüm yolcular için ayrı belgeler yüklenmelidir." },
+          { question: "Eski uçuşlar için başvuru yapabilir miyim?", answer: "Evet, son 3 yıl içindeki uçuşlar için tazminat talep edebilirsiniz. Daha eski uçuşlar için zaman aşımı nedeniyle talep hakkınız düşmüş olabilir." }
+        ]
+      }} />
       <Header isAuthenticated={isAuthenticated} />
       <HeroSection />
       <TrustBadgesSection />

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { generateOrganizationSchema, generateFAQPageSchema, generateClaimServiceSchema } from '@shared/schema';
 
 const BASE_URL = 'https://www.ucustazminat.com';
 
@@ -139,24 +140,24 @@ export function StructuredData({ type, breadcrumbItems }: StructuredDataProps) {
 
     let schemas: object[] = [];
 
-    switch (type) {
-      case 'organization':
-        schemas = [organizationSchema];
-        break;
-      case 'service':
-        schemas = [serviceSchema];
-        break;
-      case 'faq':
-        schemas = [faqSchema];
-        break;
+     switch (type) {
+       case 'organization':
+         schemas = [generateOrganizationSchema()];
+         break;
+       case 'service':
+         schemas = [generateClaimServiceSchema()];
+         break;
+       case 'faq':
+         schemas = [generateFAQPageSchema(data?.faqs || [])];
+         break;
       case 'breadcrumb':
         if (breadcrumbItems) {
           schemas = [getBreadcrumbSchema(breadcrumbItems)];
         }
         break;
-      case 'all':
-        schemas = [organizationSchema, serviceSchema, faqSchema];
-        break;
+       case 'all':
+         schemas = [generateOrganizationSchema(), generateClaimServiceSchema(), generateFAQPageSchema(data?.faqs || [])];
+         break;
     }
 
     schemas.forEach((schema, index) => {
