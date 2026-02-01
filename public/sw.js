@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ucustazminat-v1';
+const CACHE_NAME = 'ucustazminat-v2';
 const urlsToCache = [
   '/',
   '/dashboard',
@@ -59,4 +59,66 @@ self.addEventListener('activate', (event) => {
       );
     })
   );
+});
+
+// Push notification handler
+self.addEventListener('push', (event) => {
+  let data = {
+    title: 'UçuşTazminat',
+    body: 'Yeni bir bildiriminiz var',
+    icon: '/icon-192x192.png',
+    badge: '/icon-192x192.png',
+  };
+
+  if (event.data) {
+    try {
+      data = { ...data, ...event.data.json() };
+    } catch (e) {
+      console.error('Push data parse hatası:', e);
+    }
+  }
+
+  const options = {
+    body: data.body,
+    icon: data.icon,
+    badge: data.badge,
+    vibrate: [200, 100, 200],
+    data: {
+      dateOfArrival: Date.now(),
+      primaryKey: 1,
+    },
+    actions: [
+      {
+        action: 'explore',
+        title: 'Görüntüle',
+        icon: '/icon-192x192.png',
+      },
+      {
+        action: 'close',
+        title: 'Kapat',
+        icon: '/icon-192x192.png',
+      },
+    ],
+  };
+
+  event.waitUntil(
+    self.registration.showNotification(data.title, options)
+  );
+});
+
+// Notification click handler
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+
+  if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow('/dashboard')
+    );
+  } else if (event.action === 'close') {
+    // Bildirimi kapat
+  } else {
+    event.waitUntil(
+      clients.openWindow('/dashboard')
+    );
+  }
 });

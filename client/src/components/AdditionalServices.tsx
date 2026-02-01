@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { 
   Zap, Gavel, TrendingUp, Clock, CheckCircle, 
-  ArrowRight, Info, Star, Shield, DollarSign
+  ArrowRight, Info, Star, Shield, DollarSign, X
 } from 'lucide-react';
 
 interface ServiceAddon {

@@ -44,7 +44,6 @@ export default function Home() {
       <ClaimWizardSection isAuthenticated={isAuthenticated} />
       <HowItWorksSection />
       <CompensationTiersSection />
-      <TestimonialsSection />
       <FAQSection />
       <CTASection isAuthenticated={isAuthenticated} />
       <Footer />

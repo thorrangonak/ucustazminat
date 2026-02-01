@@ -36,6 +36,7 @@ import {
 } from "lucide-react";
 import { getCompensationByDistance } from "@shared/airports";
 import { downloadPowerOfAttorneyPDF } from "@/lib/pdfGenerator";
+import { QRScannerButton } from "@/components/QRScanner";
 
 // Haversine mesafe hesaplama fonksiyonu
 function haversineDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -125,6 +126,33 @@ export default function NewClaim() {
   
   // İmza verisi
   const [signatureData, setSignatureData] = useState<string>("");
+  
+  // QR tarama sonucu
+  const handleQRScan = (result: string) => {
+    try {
+      // QR kod içindeki veriyi parse et
+      // Format: "flight:TK1234|date:2024-01-01|from:IST|to:LHR"
+      const parts = result.split('|');
+      const data: Record<string, string> = {};
+      
+      parts.forEach(part => {
+        const [key, value] = part.split(':');
+        if (key && value) {
+          data[key.toLowerCase()] = value;
+        }
+      });
+      
+      toast.success("QR kod başarıyla okundu!");
+      console.log("QR verisi:", data);
+      
+      // Verileri form alanlarına doldur (varsa)
+      if (data.flight && !wizardData.flight1.flightNumber) {
+        toast.info(`Uçuş numarası algılandı: ${data.flight}`);
+      }
+    } catch (err) {
+      toast.error("QR kod okundu ancak format tanınamadı");
+    }
+  };
   
   // Eligibility check
   const [eligibilityChecked, setEligibilityChecked] = useState(false);
@@ -314,48 +342,100 @@ export default function NewClaim() {
   };
   
   // Belge yükleme fonksiyonları
-  const handleFileSelect = (passengerIndex: number, category: 'flight' | 'id' | 'consent', type: string, file: File) => {
+  const handleFileSelect = async (passengerIndex: number, category: 'flight' | 'id' | 'consent', type: string, file: File) => {
+    console.log("Dosya seçildi:", file.name, file.type, file.size);
+    
     // Dosya boyutu kontrolü (10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error("Dosya boyutu 10MB'dan küçük olmalıdır");
       return;
     }
     
-    // Dosya tipi kontrolü
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
-    if (!allowedTypes.includes(file.type)) {
-      toast.error("Sadece JPG, PNG, WebP ve PDF dosyaları yüklenebilir");
+    // Dosya tipi kontrolü - daha geniş destek
+    const allowedTypes = [
+      'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif',
+      'application/pdf', 'image/heic', 'image/heif'
+    ];
+    
+    if (!allowedTypes.includes(file.type.toLowerCase())) {
+      toast.error("Sadece JPG, PNG, GIF, WebP, HEIC ve PDF dosyaları yüklenebilir");
       return;
     }
     
-    const newDoc: PassengerDocument = {
-      type,
-      fileName: file.name,
-      file,
-    };
-    
-    setPassengerDocuments(prev => {
-      const updated = [...prev];
-      if (category === 'flight') {
-        updated[passengerIndex] = {
-          ...updated[passengerIndex],
-          flightDocs: [...updated[passengerIndex].flightDocs, newDoc],
-        };
-      } else if (category === 'id') {
-        updated[passengerIndex] = {
-          ...updated[passengerIndex],
-          idDocs: [...updated[passengerIndex].idDocs, newDoc],
-        };
-      } else if (category === 'consent') {
-        updated[passengerIndex] = {
-          ...updated[passengerIndex],
-          consentDocs: [...updated[passengerIndex].consentDocs, newDoc],
-        };
+    // Dosya validasyonu
+    try {
+      // Dosyanın gerçek bir resim olduğunu kontrol et
+      if (file.type.startsWith('image/')) {
+        const isValidImage = await validateImageFile(file);
+        if (!isValidImage) {
+          toast.error("Dosya bozuk veya geçersiz bir resim dosyası");
+          return;
+        }
       }
-      return updated;
+      
+      const newDoc: PassengerDocument = {
+        type,
+        fileName: file.name,
+        file,
+      };
+      
+      setPassengerDocuments(prev => {
+        const updated = [...prev];
+        if (category === 'flight') {
+          updated[passengerIndex] = {
+            ...updated[passengerIndex],
+            flightDocs: [...updated[passengerIndex].flightDocs, newDoc],
+          };
+        } else if (category === 'id') {
+          updated[passengerIndex] = {
+            ...updated[passengerIndex],
+            idDocs: [...updated[passengerIndex].idDocs, newDoc],
+          };
+        } else if (category === 'consent') {
+          updated[passengerIndex] = {
+            ...updated[passengerIndex],
+            consentDocs: [...updated[passengerIndex].consentDocs, newDoc],
+          };
+        }
+        return updated;
+      });
+      
+      toast.success("Belge başarıyla yüklendi");
+    } catch (error) {
+      console.error("Dosya yükleme hatası:", error);
+      toast.error("Dosya yüklenirken bir hata oluştu");
+    }
+  };
+  
+  // Resim dosyası validasyonu
+  const validateImageFile = (file: File): Promise<boolean> => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        console.log("Resim yüklendi:", img.width, "x", img.height);
+        resolve(true);
+      };
+      
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        console.error("Resim yüklenemedi");
+        resolve(false);
+      };
+      
+      img.src = url;
+      
+      // Timeout - çok büyük dosyalar için
+      setTimeout(() => {
+        if (!img.complete) {
+          URL.revokeObjectURL(url);
+          console.error("Resim yükleme zaman aşımı");
+          resolve(false);
+        }
+      }, 5000);
     });
-    
-    toast.success("Belge eklendi");
   };
   
   const handleDeleteDocument = (passengerIndex: number, category: 'flight' | 'id' | 'consent', docIndex: number) => {
@@ -1049,12 +1129,12 @@ export default function NewClaim() {
                             )}
                           </CardTitle>
                         </div>
-                        <p className="text-sm text-muted-foreground">
-                          Aşağıdaki belgelerden <strong>en az birini</strong> yükleyin
-                        </p>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="grid gap-3">
+                         <p className="text-sm text-muted-foreground">
+                           Aşağıdaki belgelerden <strong>en az birini</strong> yükleyin
+                         </p>
+                       </CardHeader>
+                       <CardContent>
+                         <div className="grid gap-3">
                           {FLIGHT_DOC_TYPES.map((docType) => {
                             const Icon = docType.icon;
                             const uploadedDocs = passengerDocuments[passengerIndex]?.flightDocs.filter(d => d.type === docType.type) || [];
@@ -1068,7 +1148,7 @@ export default function NewClaim() {
                                     : 'border-foreground/10'
                                 }`}
                               >
-                                <div className="flex items-center justify-between">
+                                <div className="flex items-center justify-between mb-3">
                                   <div className="flex items-center gap-3">
                                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                                       uploadedDocs.length > 0 ? 'bg-green-100' : 'bg-secondary'
@@ -1079,7 +1159,12 @@ export default function NewClaim() {
                                       <div className="font-medium">{docType.label}</div>
                                     </div>
                                   </div>
-                                  <label className="cursor-pointer">
+                                  {docType.type === "boarding_pass" && (
+                                    <QRScannerButton onScan={handleQRScan} />
+                                  )}
+                                </div>
+                                <div className="flex items-center justify-between">
+                                  <label className="cursor-pointer flex-1">
                                     <input
                                       type="file"
                                       className="hidden"

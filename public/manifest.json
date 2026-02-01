@@ -21,6 +21,7 @@ export default {
     }
   ],
   categories: ['finance', 'travel'],
+  gcm_sender_id: 'YOUR_SENDER_ID',
   shortcuts: [
     {
       name: 'Talep Oluştur',

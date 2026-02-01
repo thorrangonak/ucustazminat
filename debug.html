@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Console Görüntüleme</title>
+    <style>
+        * { margin: 0; padding: 0; }
+        body {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 20px;
+        }
+        .error {
+            color: #ff6b6b;
+            background: #2d2d2d;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success {
+            color: #69db7c;
+            background: #2d2d2d;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .info {
+            color: #4dabf7;
+            background: #2d2d2d;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .info h2 {
+            color: #4dabf7;
+            margin-bottom: 10px;
+        }
+        button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #b91c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="info">
+        <h2>🔍 Debug Modu</h2>
+        <p>Console'da JavaScript hatalarını görüntülemek için F12 tuşuna basın</p>
+        <p>Console sekmesine gidin ve kırmızı hata mesajlarını okuyun</p>
+        <p>Hata mesajlarının tamamını kopyalayı bana gönderin!</p>
+    </div>
+    
+    <div class="info">
+        <h2>📋 Hataları Gönderme</h2>
+        <p>1. F12 tuşuna basın</p>
+        <p>2. Console sekmesine gidin</p>
+        <p>3. Kırmızı hata mesajlarını seçin</p>
+        <p>4. Cmd+C ile kopyalayın</p>
+        <p>5. Bana yapıştırın</p>
+    </div>
+    
+    <button onclick="window.open('http://localhost:3000', '_blank')">
+        🚀 React Sitesini Aç
+    </button>
+</body>
+</html>

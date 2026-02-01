@@ -126,9 +126,10 @@ export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
 interface StructuredDataProps {
   type: 'organization' | 'service' | 'faq' | 'breadcrumb' | 'all';
   breadcrumbItems?: { name: string; url: string }[];
+  faqs?: Array<{ question: string; answer: string }>;
 }
 
-export function StructuredData({ type, breadcrumbItems }: StructuredDataProps) {
+export function StructuredData({ type, breadcrumbItems, faqs }: StructuredDataProps) {
   useEffect(() => {
     const scriptId = `structured-data-${type}`;
     
@@ -148,7 +149,7 @@ export function StructuredData({ type, breadcrumbItems }: StructuredDataProps) {
          schemas = [generateClaimServiceSchema()];
          break;
        case 'faq':
-         schemas = [generateFAQPageSchema(data?.faqs || [])];
+         schemas = [generateFAQPageSchema(faqs || [])];
          break;
       case 'breadcrumb':
         if (breadcrumbItems) {
@@ -156,7 +157,7 @@ export function StructuredData({ type, breadcrumbItems }: StructuredDataProps) {
         }
         break;
        case 'all':
-         schemas = [generateOrganizationSchema(), generateClaimServiceSchema(), generateFAQPageSchema(data?.faqs || [])];
+         schemas = [generateOrganizationSchema(), generateClaimServiceSchema(), generateFAQPageSchema(faqs || [])];
          break;
     }
 
@@ -176,7 +177,7 @@ export function StructuredData({ type, breadcrumbItems }: StructuredDataProps) {
         }
       });
     };
-  }, [type, breadcrumbItems]);
+  }, [type, breadcrumbItems, faqs]);
 
   return null;
 }
